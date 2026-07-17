@@ -1,8 +1,7 @@
 from django.db import models
 
 from django.db import models
-from rest_framework.authtoken.admin import User
-
+from django.contrib.auth.models import User
 
 class Post(models.Model):
     author = models.ForeignKey(

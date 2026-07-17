@@ -55,8 +55,9 @@ from api.serializers import PostSerializer, RegisterSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.select_related("author")
     serializer_class = PostSerializer
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
 
