@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from api.views import (PostViewSet,RegisterView,LoginView,LogoutView,)
+from api.views import (PostViewSet, RegisterView, LoginView, LogoutView, TestView, )
 
 router = DefaultRouter()
 router.register("posts", PostViewSet)
@@ -12,6 +12,7 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("test-task/", TestView.as_view()),
 ]
 # urlpatterns = [
 #     # path('api/hello/', salom),

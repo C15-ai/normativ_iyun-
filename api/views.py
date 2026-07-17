@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 
 from api.models import Post
 from api.serializers import PostSerializer, RegisterSerializer
+from api.tasks import salom_task, sleep_task
 
 
 # def salom(request):
@@ -103,6 +104,16 @@ class LogoutView(APIView):
         logout(request)
         return JsonResponse({'status': 'success'}, status=status.HTTP_200_OK)
 
+
+
+class TestView(APIView):
+    def get(self , request):
+        salom_task.delay()
+        sleep_task.delay()
+
+        return Response({
+            "massage" : "ikkalasiyam ishladi"
+        })
 
 
 
