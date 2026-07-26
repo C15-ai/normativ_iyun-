@@ -29,21 +29,22 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'django.contrib.staticfiles',
 
     # 3 rd
     "rest_framework",
     'rest_framework.authtoken',
     'django_filters',
-    "django_celery_beat" ,
-    'daphne' ,
-    'channels' ,
+    "django_celery_beat",
 
+    'channels',
 
     # local
 
@@ -161,10 +162,20 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 1,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ]
+    ] ,
+
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "5/min",
+        "user": "10/min",
+        "post_create" : '3/min',
+    }
 }
-
-
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 
@@ -178,4 +189,11 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-post-cache",
+    }
 }

@@ -1,6 +1,10 @@
+from linecache import cache
+
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -12,6 +16,7 @@ from rest_framework.views import APIView
 from api.models import Post
 from api.serializers import PostSerializer, RegisterSerializer
 from api.tasks import salom_task, sleep_task
+from api.throttles import PostCreateThrottle
 
 
 # def salom(request):
@@ -54,7 +59,7 @@ from api.tasks import salom_task, sleep_task
 
 
 
-
+@method_decorator(cache_page(60) , name="list")
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.select_related("author")
     serializer_class = PostSerializer
@@ -71,6 +76,18 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+        cache.clear()
+    def perform_update(self, serializer):
+        serializer.save()
+        cache.clear()
+    def perform_destroy(self, instance):
+        instance.delete()
+        cache.clear()
+    def get_throttles(self):
+        if self.action == "create":
+            return [PostCreateThrottle]
+        return super().get_throttles()
+
 
 
 
