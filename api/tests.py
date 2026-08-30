@@ -68,12 +68,12 @@ class IntegrationTest(APITestCase):
         self.assertEqual(post.status_code , status.HTTP_201_CREATED)
         post_id = post.data['id']
 
-        posts = self.client.get("api/posts/")
+        posts = self.client.get("/api/posts/")
 
         self.assertEqual(posts.status_code, status.HTTP_200_OK)
 
 
-        update = self.client.put(f"api/posts/{post_id}/", {
+        update = self.client.put(f"/api/posts/{post_id}/", {
             "title": "Yangilandi",
             "content": "abbababababbaabbababababab"
         })

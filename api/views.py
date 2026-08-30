@@ -83,9 +83,10 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.delete()
         cache.clear()
+
     def get_throttles(self):
         if self.action == "create":
-            return [PostCreateThrottle]
+            return [PostCreateThrottle()]
         return super().get_throttles()
 
 
