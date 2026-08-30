@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     "django_celery_beat",
+    'drf_spectacular',
 
     'channels',
 
@@ -162,8 +163,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 1,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ] ,
-
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
@@ -173,7 +174,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "5/min",
         "user": "10/min",
-        "post_create" : '3/min',
+        "post_create": '3/min',
     }
 }
 
@@ -196,4 +197,11 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "unique-post-cache",
     }
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Sizning API',
+    'DESCRIPTION': 'API hujjatlari',
+    'VERSION': '1.0.0',
 }
